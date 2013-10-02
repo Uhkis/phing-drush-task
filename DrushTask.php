@@ -268,6 +268,9 @@ class DrushTask extends Task {
     exec($command, $output, $return);
     // Collect Drush output for display through Phing's log.
     foreach ($output as $line) {
+      if ($this->haltonerror && preg_match_all('/Drush command terminated abnormally due to an unrecoverable error./', $line)) {
+        throw new BuildException("Drush command terminated abnormally due to an unrecoverable error.");
+      }
       $this->log($line);
     }
     // Set value of the 'pipe' property.
