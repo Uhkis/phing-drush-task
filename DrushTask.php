@@ -265,10 +265,10 @@ class DrushTask extends Task {
     // Execute Drush.
     $this->log("Executing '$command'...");
     $output = array();
-    exec($command, $output, $return);
+    exec($command . ' 2>&1', $output, $return);
     // Collect Drush output for display through Phing's log.
     foreach ($output as $line) {
-      if ($this->haltonerror && preg_match_all('/Drush command terminated abnormally due to an unrecoverable error./', $line)) {
+      if ($this->haltonerror && strpos($line, 'Drush command terminated abnormally due to an unrecoverable error.') !== FALSE) {
         throw new BuildException("Drush command terminated abnormally due to an unrecoverable error.");
       }
       $this->log($line);
