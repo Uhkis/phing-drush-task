@@ -62,6 +62,7 @@ class DrushTask extends Task {
   private $bin = NULL;
   private $uri = NULL;
   private $root = NULL;
+  private $site_alias = NULL;
   private $assume = NULL;
   private $simulate = FALSE;
   private $pipe = FALSE;
@@ -91,6 +92,10 @@ class DrushTask extends Task {
    */
   public function setRoot($str) {
     $this->root = $str;
+  }
+
+  public function setSiteAlias($str) {
+    $this->site_alias = $str;
   }
 
   /**
@@ -198,6 +203,7 @@ class DrushTask extends Task {
     $this->root = $this->getProject()->getProperty('drush.root');
     $this->uri = $this->getProject()->getProperty('drush.uri');
     $this->bin = $this->getProject()->getProperty('drush.bin');
+    $this->site_alias = $this->getProject()->getProperty('drush.site_alias');
   }
 
   /**
@@ -212,7 +218,13 @@ class DrushTask extends Task {
     $option->setName('nocolor');
     $this->options[] = $option;
 
-    if (!empty($this->root)) {
+    if (!empty($this->site_alias)) {
+      $option = new DrushOption();
+      $option->addText($this->site_alias);
+      $this->options[] = $option;
+    }
+
+    if (!empty($this->root) && empty($this->site_alias)) {
       $option = new DrushOption();
       $option->setName('root');
       $option->addText($this->root);
