@@ -219,9 +219,9 @@ class DrushTask extends Task {
     $this->options[] = $option;
 
     if (!empty($this->site_alias)) {
-      $option = new DrushOption();
-      $option->addText($this->site_alias);
-      $this->options[] = $option;
+      $param = new DrushParam();
+      $param->addText($this->site_alias);
+      $command[] = $param->getValue();
     }
 
     if (!empty($this->root) && empty($this->site_alias)) {
